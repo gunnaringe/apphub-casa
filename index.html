@@ -86,7 +86,7 @@
     position: relative;
     display: grid;
     grid-template-columns: auto 1fr auto;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
     align-items: center;
     gap: 0 0.85rem;
     padding: 1.1rem 1.2rem 1.15rem;
@@ -103,9 +103,23 @@
     box-shadow: var(--shadow-hi);
   }
 
+  .shot {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  }
+
   .icon {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
     display: grid;
     place-items: center;
     width: 2.5rem;
@@ -125,7 +139,7 @@
 
   a.card-link {
     grid-column: 2;
-    grid-row: 1;
+    grid-row: 2;
     color: inherit;
     text-decoration: none;
   }
@@ -140,7 +154,7 @@
 
   .arrow {
     grid-column: 3;
-    grid-row: 1;
+    grid-row: 2;
     align-self: start;
     color: var(--faint);
     transition: transform .18s ease, color .18s ease;
@@ -153,7 +167,7 @@
 
   .desc {
     grid-column: 1 / -1;
-    grid-row: 2;
+    grid-row: 3;
     margin: 0.75rem 0 0;
     color: var(--muted);
     font-size: 0.92rem;
@@ -162,7 +176,7 @@
   /* Pinned to the bottom so host rows line up across cards in the same grid row. */
   .hosts {
     grid-column: 1 / -1;
-    grid-row: 3;
+    grid-row: 4;
     align-self: end;
     position: relative;
     z-index: 1;
@@ -233,6 +247,7 @@
 
   <ul>
     <li class="app" style="--accent: var(--clock)">
+      <img class="shot" src="shots/clock.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="9"/>
@@ -252,6 +267,7 @@
     </li>
 
     <li class="app" style="--accent: var(--time)">
+      <img class="shot" src="shots/time.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="9"/>
@@ -272,6 +288,7 @@
     </li>
 
     <li class="app" style="--accent: var(--chores)">
+      <img class="shot" src="shots/chores.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M9 4.5h6a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-.5a1 1 0 0 1 1-1z"/>
@@ -293,6 +310,7 @@
     </li>
 
     <li class="app" style="--accent: var(--runes)">
+      <img class="shot" src="shots/runenavn.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M8.5 3.5v17"/>
@@ -313,6 +331,7 @@
     </li>
 
     <li class="app" style="--accent: var(--colors)">
+      <img class="shot" src="shots/color.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="7.5" r="4"/>
@@ -333,6 +352,7 @@
     </li>
 
     <li class="app" style="--accent: var(--countdown)">
+      <img class="shot" src="shots/countdown.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6.5 3.5h11"/>
