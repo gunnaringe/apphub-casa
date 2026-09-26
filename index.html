@@ -23,10 +23,12 @@
     --shadow:    light-dark(0 1px 2px rgb(16 20 30 / .05), 0 1px 2px rgb(0 0 0 / .3));
     --shadow-hi: light-dark(0 8px 24px -8px rgb(16 20 30 / .18), 0 8px 24px -8px rgb(0 0 0 / .6));
 
-    --clock:  light-dark(#2563eb, #6d8cff);
-    --chores: light-dark(#0f9268, #35d6a4);
-    --runes:  light-dark(#7c3aed, #b58cff);
-    --colors: light-dark(#d97706, #fbbf24);
+    --clock:     light-dark(#2563eb, #6d8cff);
+    --time:      light-dark(#0e7490, #22d3ee);
+    --chores:    light-dark(#0f9268, #35d6a4);
+    --runes:     light-dark(#7c3aed, #b58cff);
+    --colors:    light-dark(#d97706, #fbbf24);
+    --countdown: light-dark(#e11d48, #fb7185);
   }
 
   * { box-sizing: border-box; }
@@ -40,9 +42,12 @@
     justify-content: center;
     background-color: var(--bg);
     background-image:
-      radial-gradient(60rem 30rem at 15% -10%, color-mix(in srgb, var(--clock) 14%, transparent), transparent 70%),
-      radial-gradient(45rem 28rem at 95% 8%, color-mix(in srgb, var(--runes) 12%, transparent), transparent 70%);
+      radial-gradient(60rem 30rem at 10% -10%, color-mix(in srgb, var(--clock) 14%, transparent), transparent 70%),
+      radial-gradient(45rem 28rem at 95% 5%, color-mix(in srgb, var(--runes) 12%, transparent), transparent 70%),
+      radial-gradient(50rem 26rem at 85% 110%, color-mix(in srgb, var(--chores) 9%, transparent), transparent 70%),
+      radial-gradient(40rem 24rem at 5% 105%, color-mix(in srgb, var(--countdown) 7%, transparent), transparent 70%);
     background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--fg);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-size: 16px;
@@ -50,7 +55,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  main { width: 100%; max-width: 32rem; }
+  main { width: 100%; max-width: 46rem; }
 
   header { margin-bottom: clamp(1.75rem, 5vw, 2.5rem); }
 
@@ -67,22 +72,24 @@
     font-size: 1.02rem;
   }
 
+  /* One column on phones, two side by side once there's room for both. */
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 0.9rem;
   }
 
   .app {
     position: relative;
     display: grid;
     grid-template-columns: auto 1fr auto;
-    align-items: start;
-    gap: 0 1rem;
-    padding: 1.1rem 1.2rem;
+    grid-template-rows: auto auto 1fr;
+    align-items: center;
+    gap: 0 0.85rem;
+    padding: 1.1rem 1.2rem 1.15rem;
     border: 1px solid var(--border);
     border-radius: 16px;
     background: var(--card);
@@ -98,18 +105,17 @@
 
   .icon {
     grid-column: 1;
-    grid-row: 1 / span 3;
-    align-self: start;
+    grid-row: 1;
     display: grid;
     place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 12px;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 11px;
     color: var(--accent);
     background: color-mix(in srgb, var(--accent) 13%, transparent);
     border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
   }
-  .icon svg { width: 1.4rem; height: 1.4rem; }
+  .icon svg { width: 1.3rem; height: 1.3rem; }
 
   .name {
     font-size: 1.06rem;
@@ -132,20 +138,35 @@
     border-radius: inherit;
   }
 
+  .arrow {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+    color: var(--faint);
+    transition: transform .18s ease, color .18s ease;
+  }
+  .app:hover .arrow, .app:focus-within .arrow {
+    transform: translate(2px, -2px);
+    color: var(--accent);
+  }
+  .arrow svg { width: 1.1rem; height: 1.1rem; display: block; }
+
   .desc {
-    grid-column: 2;
+    grid-column: 1 / -1;
     grid-row: 2;
-    margin: 0.1rem 0 0;
+    margin: 0.75rem 0 0;
     color: var(--muted);
     font-size: 0.92rem;
   }
 
+  /* Pinned to the bottom so host rows line up across cards in the same grid row. */
   .hosts {
-    grid-column: 2;
+    grid-column: 1 / -1;
     grid-row: 3;
+    align-self: end;
     position: relative;
     z-index: 1;
-    margin-top: 0.5rem;
+    margin-top: 0.6rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -177,19 +198,6 @@
     background: color-mix(in srgb, var(--accent) 12%, transparent);
   }
 
-  .chevron {
-    grid-column: 3;
-    grid-row: 1 / span 3;
-    align-self: center;
-    color: var(--faint);
-    transition: transform .18s ease, color .18s ease;
-  }
-  .app:hover .chevron, .app:focus-within .chevron {
-    transform: translateX(3px);
-    color: var(--accent);
-  }
-  .chevron svg { width: 1.15rem; height: 1.15rem; display: block; }
-
   a:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
@@ -209,15 +217,10 @@
   }
   footer a:hover { color: var(--fg); }
 
-  @media (max-width: 26rem) {
-    .app { grid-template-columns: auto 1fr; }
-    .chevron { display: none; }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
     .app:hover, .app:focus-within { transform: none; }
-    .app:hover .chevron, .app:focus-within .chevron { transform: none; }
+    .app:hover .arrow, .app:focus-within .arrow { transform: none; }
   }
 </style>
 </head>
@@ -237,14 +240,34 @@
         </svg>
       </span>
       <a class="card-link" href="https://clock.apphub.casa"><span class="name">Clock</span></a>
-      <span class="chevron">
+      <span class="arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="m9 6 6 6-6 6"/>
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
         </svg>
       </span>
-      <p class="desc">World clock across time zones</p>
+      <p class="desc">World clock with a 24-hour planner, made for wall screens</p>
       <div class="hosts">
         <span class="host"><a href="https://clock.apphub.casa">clock.apphub.casa</a></span>
+      </div>
+    </li>
+
+    <li class="app" style="--accent: var(--time)">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M3 12h18"/>
+          <path d="M12 3a13.5 13.5 0 0 1 0 18 13.5 13.5 0 0 1 0-18z"/>
+        </svg>
+      </span>
+      <a class="card-link" href="https://time.apphub.casa"><span class="name">Time</span></a>
+      <span class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
+        </svg>
+      </span>
+      <p class="desc">Minimal world clock</p>
+      <div class="hosts">
+        <span class="host"><a href="https://time.apphub.casa">time.apphub.casa</a><span class="tag">Norsk</span><span class="tag">English</span></span>
       </div>
     </li>
 
@@ -257,9 +280,9 @@
         </svg>
       </span>
       <a class="card-link" href="https://chores.apphub.casa"><span class="name">Chores</span></a>
-      <span class="chevron">
+      <span class="arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="m9 6 6 6-6 6"/>
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
         </svg>
       </span>
       <p class="desc">Family allowance &amp; chore tracker</p>
@@ -278,9 +301,9 @@
         </svg>
       </span>
       <a class="card-link" href="https://runenavn.apphub.casa"><span class="name">Runenavn</span></a>
-      <span class="chevron">
+      <span class="arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="m9 6 6 6-6 6"/>
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
         </svg>
       </span>
       <p class="desc">Your name written in runes</p>
@@ -298,14 +321,35 @@
         </svg>
       </span>
       <a class="card-link" href="https://color.apphub.casa"><span class="name">Colors</span></a>
-      <span class="chevron">
+      <span class="arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="m9 6 6 6-6 6"/>
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
         </svg>
       </span>
       <p class="desc">Random color screen for kids' games</p>
       <div class="hosts">
         <span class="host"><a href="https://color.apphub.casa">color.apphub.casa</a><span class="tag">Norsk</span><span class="tag">English</span></span>
+      </div>
+    </li>
+
+    <li class="app" style="--accent: var(--countdown)">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6.5 3.5h11"/>
+          <path d="M6.5 20.5h11"/>
+          <path d="M7.8 3.5c0 4.4 4.2 5.6 4.2 8.5s-4.2 4.1-4.2 8.5"/>
+          <path d="M16.2 3.5c0 4.4-4.2 5.6-4.2 8.5s4.2 4.1 4.2 8.5"/>
+        </svg>
+      </span>
+      <a class="card-link" href="https://countdown.apphub.casa"><span class="name">Countdown</span></a>
+      <span class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
+        </svg>
+      </span>
+      <p class="desc">Full-screen countdown timer for kids</p>
+      <div class="hosts">
+        <span class="host"><a href="https://countdown.apphub.casa">countdown.apphub.casa</a><span class="tag">Norsk</span><span class="tag">English</span></span>
       </div>
     </li>
   </ul>
