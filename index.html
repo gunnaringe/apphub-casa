@@ -103,6 +103,9 @@
     box-shadow: var(--shadow-hi);
   }
 
+  /* Animated shots are wrapped in <picture> for a still reduced-motion version;
+     let the <img> inside take part in the card grid as if unwrapped. */
+  .app picture { display: contents; }
   .shot {
     grid-column: 1 / -1;
     grid-row: 1;
@@ -331,7 +334,10 @@
     </li>
 
     <li class="app" style="--accent: var(--colors)">
-      <img class="shot" src="shots/color.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+      <picture>
+        <source srcset="shots/color.webp" media="(prefers-reduced-motion: reduce)">
+        <img class="shot" src="shots/color-anim.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+      </picture>
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="7.5" r="4"/>
@@ -352,7 +358,10 @@
     </li>
 
     <li class="app" style="--accent: var(--countdown)">
-      <img class="shot" src="shots/countdown.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+      <picture>
+        <source srcset="shots/countdown.webp" media="(prefers-reduced-motion: reduce)">
+        <img class="shot" src="shots/countdown-anim.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+      </picture>
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6.5 3.5h11"/>
