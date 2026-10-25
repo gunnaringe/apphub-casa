@@ -9,7 +9,9 @@
 const [shotsDir, frameDir, ...only] = process.argv.slice(2);
 const fs = await import('node:fs');
 
-const APPS = ['clock', 'time', 'chores', 'runenavn', 'color', 'countdown'];
+const APPS = ['clock', 'time', 'chores', 'runenavn', 'color', 'countdown', 'sermon-studio'];
+// Apps not hosted at <app>.apphub.casa.
+const URLS = { 'sermon-studio': 'https://sermon-studio.app/?lang=en' };
 const W = 1280, H = 800, SCALE = 0.5;
 
 const list = await (await fetch('http://127.0.0.1:9222/json/list')).json();
@@ -33,7 +35,7 @@ const space = async () => {
 };
 const click = sel => send('Runtime.evaluate', { expression: `document.querySelector(${JSON.stringify(sel)}).click()` });
 const open = async app => {
-  await send('Page.navigate', { url: `https://${app}.apphub.casa` });
+  await send('Page.navigate', { url: URLS[app] ?? `https://${app}.apphub.casa` });
   await sleep(3500);
 };
 
