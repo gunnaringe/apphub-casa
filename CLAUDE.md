@@ -12,12 +12,22 @@ custom domain is bound to it.
 Assets are served from the repo root, so anything that shouldn't be public
 goes in `.assetsignore` (currently `tools/` and this file).
 
+## Layout
+
+Featured apps first (Sermon Studio, Chores: full-width cards in
+`ul.apps.featured`, screenshot left on wide screens, a few `.points`), then
+grouped lists under `h2` headings (Everyday with Clock first, Fun & games),
+then Contact (mail@apphub.casa) and the footer. Clock is much used: keep it
+first after the featured apps.
+
 ## Adding an app
 
-One `<li class="app">` per app in `index.html`: add an accent colour
-variable in `:root`, a 24px stroke icon, the hosts with language tags, and a
-screenshot (`tools/shots.sh <app>` after adding it to `APPS` in
-`tools/capture.mjs`).
+One `<li class="app">` per app in `index.html`, in the right group: add an
+accent colour variable in `:root`, a 24px stroke icon, the hosts with
+language tags, a `source` link to its GitHub repo as the last item in
+`.hosts` (links outside `.hosts` are covered by the card's stretched link),
+and a screenshot (`tools/shots.sh <app>` after adding it to `APPS` in
+`tools/capture.mjs`, plus `URLS` if it isn't at `<app>.apphub.casa`).
 
 ## Screenshots
 
@@ -27,3 +37,15 @@ in `capture.mjs` also get `shots/<app>-anim.webp` (animated WebP via Pillow);
 the page shows those in a `<picture>` with the still as the
 `prefers-reduced-motion` fallback. Clock/Time/Countdown capture the current
 time, so rerunning changes them even if the app didn't change.
+
+Featured apps (`LARGE` in `capture.mjs`) also get `shots/<app>-large.webp`
+(960x600). `tools/shots.sh og` renders `tools/og.html` from the shots to
+`shots/og.jpg`, the link preview (`og:image`); a full run does it last.
+Apex caching keeps assets up to 4 h in browsers, so a changed image may show
+late; a new file name avoids that.
+
+## PRs
+
+Changes go in PRs with screenshots of the page served locally:
+`tools/pr-shots.sh [--pr] <png>...` uploads them to the orphan `pr-shots`
+branch and prints (or adds) the Markdown.

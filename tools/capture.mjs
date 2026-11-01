@@ -4,12 +4,16 @@
 //   node capture.mjs <shotsdir> <framedir> [app...]
 //
 // Stills are written straight to <shotsdir>/<app>.webp (640x400). Apps in
+// LARGE (the featured cards) also get <app>-large.webp (960x600). Apps in
 // ANIMATED also get frames + durations.json in <framedir>/<app>/, which
-// assemble.py turns into <shotsdir>/<app>-anim.webp.
+// assemble.py turns into <shotsdir>/<app>-anim.webp. The pseudo-app "og"
+// renders tools/og.html (made of the shots) to <shotsdir>/og.jpg, the link
+// preview image; it runs last when no apps are named.
 const [shotsDir, frameDir, ...only] = process.argv.slice(2);
 const fs = await import('node:fs');
 
-const APPS = ['clock', 'time', 'chores', 'runenavn', 'color', 'countdown', 'sermon-studio'];
+const APPS = ['sermon-studio', 'chores', 'clock', 'whenever', 'time', 'runenavn', 'color', 'countdown', 'poengblokka'];
+const LARGE = ['sermon-studio', 'chores'];
 // Apps not hosted at <app>.apphub.casa.
 const URLS = { 'sermon-studio': 'https://sermon-studio.app/?lang=en' };
 const W = 1280, H = 800, SCALE = 0.5;
@@ -22,10 +26,10 @@ ws.onmessage = e => { const m = JSON.parse(e.data); pending.get(m.id)?.(m.result
 const send = (method, params = {}) => new Promise(r => { pending.set(++id, r); ws.send(JSON.stringify({ id, method, params })); });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const capture = async (format) => {
+const capture = async (format, scale = SCALE, w = W, h = H) => {
   const { data } = await send('Page.captureScreenshot', {
-    format, quality: format === 'webp' ? 80 : undefined,
-    clip: { x: 0, y: 0, width: W, height: H, scale: SCALE },
+    format, quality: format === 'png' ? undefined : 80,
+    clip: { x: 0, y: 0, width: w, height: h, scale },
   });
   return Buffer.from(data, 'base64');
 };
@@ -92,10 +96,22 @@ const ANIMATED = {
 
 await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false });
 fs.mkdirSync(shotsDir, { recursive: true });
-for (const app of only.length ? only : APPS) {
+for (const app of only.length ? only : [...APPS, 'og']) {
+  if (app === 'og') {
+    const { pathToFileURL } = await import('node:url');
+    const page = new URL('og.html', pathToFileURL(`${import.meta.dirname}/`));
+    await send('Emulation.setDeviceMetricsOverride', { width: 1200, height: 630, deviceScaleFactor: 1, mobile: false });
+    await send('Page.navigate', { url: page.href });
+    await sleep(1500);
+    fs.writeFileSync(`${shotsDir}/og.jpg`, await capture('jpeg', 1, 1200, 630));
+    await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false });
+    console.log('og');
+    continue;
+  }
   await open(app);
   await STILL_SETUP[app]?.();
   fs.writeFileSync(`${shotsDir}/${app}.webp`, await capture('webp'));
+  if (LARGE.includes(app)) fs.writeFileSync(`${shotsDir}/${app}-large.webp`, await capture('webp', 0.75));
   console.log('still', app);
   if (ANIMATED[app]) {
     await open(app);
