@@ -4,7 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>apphub.casa</title>
-<meta name="description" content="A few small apps.">
+<meta name="description" content="Small apps for family, church and office: Sermon Studio, Chores, Clock, Whenever and more.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://apphub.casa/">
+<meta property="og:title" content="apphub.casa">
+<meta property="og:description" content="Small apps for family, church and office: Sermon Studio, Chores, Clock, Whenever and more.">
+<meta property="og:image" content="https://apphub.casa/shots/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="apphub.casa, with screenshots of Sermon Studio, Chores, Clock and Whenever">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236d8cff'/><g fill='white'><circle cx='11.5' cy='11.5' r='3'/><circle cx='20.5' cy='11.5' r='3'/><circle cx='11.5' cy='20.5' r='3'/><circle cx='20.5' cy='20.5' r='3'/></g></svg>">
@@ -30,6 +39,8 @@
     --colors:    light-dark(#d97706, #fbbf24);
     --countdown: light-dark(#e11d48, #fb7185);
     --sermon:    light-dark(#4d7c0f, #a3e635);
+    --whenever:  light-dark(#c026d3, #e879f9);
+    --scores:    light-dark(#c2410c, #fb923c);
   }
 
   * { box-sizing: border-box; }
@@ -73,8 +84,18 @@
     font-size: 1.02rem;
   }
 
+  /* Group headings between the lists. */
+  h2 {
+    margin: 2.25rem 0 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
   /* One column on phones, two side by side once there's room for both. */
-  ul {
+  .apps {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -115,6 +136,7 @@
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
+    object-position: top;
     margin-bottom: 1rem;
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -148,7 +170,7 @@
     text-decoration: none;
   }
   /* Stretched link: the whole card activates the primary destination, while the
-     secondary host links below stay independently clickable via z-index. */
+     secondary links in .hosts stay independently clickable via z-index. */
   a.card-link::after {
     content: "";
     position: absolute;
@@ -207,6 +229,16 @@
   }
   .hosts a:hover { color: var(--accent); }
 
+  /* The app's source on GitHub, at the end of the host row. */
+  .hosts a.source {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-bottom: 0;
+  }
+  .source svg { width: 0.95rem; height: 0.95rem; display: block; }
+
   .tag {
     font-family: inherit;
     font-size: 0.7rem;
@@ -216,8 +248,80 @@
     background: color-mix(in srgb, var(--accent) 12%, transparent);
   }
 
+  /* Featured: the two bigger apps, full width above the groups. Stacked like
+     the other cards on phones, with a few highlights under the description. */
+  .apps.featured { grid-template-columns: 1fr; }
+  .featured .app { grid-template-rows: auto auto auto auto 1fr; }
+  .featured .shot { aspect-ratio: 16 / 10; }
+  .points {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin: 0.6rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .points li {
+    position: relative;
+    padding-left: 1.1rem;
+  }
+  .points li + li { margin-top: 0.15rem; }
+  .points li::before {
+    content: "";
+    position: absolute;
+    left: 0.15rem;
+    top: 0.6em;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .featured .hosts { grid-row: 5; margin-top: 0.85rem; }
+
+  /* Screenshot on the left, text on the right once the card is wide enough. */
+  @media (min-width: 42rem) {
+    .featured .app {
+      grid-template-columns: minmax(0, 1.2fr) auto minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto 1fr;
+      padding: 1rem 1.2rem 1rem 1rem;
+    }
+    .featured .shot {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      height: 100%;
+      margin: 0 0.5rem 0 0;
+    }
+    .featured .icon     { grid-column: 2; grid-row: 1; }
+    .featured .card-link { grid-column: 3; grid-row: 1; }
+    .featured .arrow    { grid-column: 4; grid-row: 1; }
+    .featured .desc     { grid-column: 2 / -1; grid-row: 2; }
+    .featured .points   { grid-column: 2 / -1; grid-row: 3; }
+    .featured .hosts    { grid-column: 2 / -1; grid-row: 4; }
+  }
+
+  /* About: what these apps are, and how to get in touch, in one box. */
+  .about .note {
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--card) 70%, transparent);
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .about p { margin: 0; }
+  .about p + p { margin-top: 0.6rem; }
+  .about .lead { color: var(--fg); }
+  .about a {
+    color: var(--fg);
+    font-weight: 600;
+    text-decoration-color: color-mix(in srgb, var(--clock) 50%, transparent);
+    text-underline-offset: 3px;
+  }
+  .about a:hover { color: var(--clock); }
+
   a:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent, var(--clock));
     outline-offset: 3px;
     border-radius: 4px;
   }
@@ -246,10 +350,71 @@
 <main>
   <header>
     <h1>apphub.casa</h1>
-    <p class="tagline">A few small apps.</p>
+    <p class="tagline">Small apps for family, church and office.</p>
   </header>
 
-  <ul>
+  <ul class="apps featured" aria-label="Featured">
+    <li class="app" style="--accent: var(--sermon)">
+      <img class="shot" src="shots/sermon-studio-large.webp" alt="" width="960" height="600" decoding="async">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 11v2"/>
+          <path d="M8 8.5v7"/>
+          <path d="M12 4.5v15"/>
+          <path d="M16 8.5v7"/>
+          <path d="M20 11v2"/>
+        </svg>
+      </span>
+      <a class="card-link" href="https://sermon-studio.app"><span class="name">Sermon Studio</span></a>
+      <span class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
+        </svg>
+      </span>
+      <p class="desc">From the recording of a service to sermon files, ready for a podcast or the church's website</p>
+      <ul class="points">
+        <li>Mark the sermon on a waveform and press Save</li>
+        <li>Evenly loud FLAC, MP3 and Opus</li>
+        <li>Hosted for churches by invite, or run it yourself</li>
+      </ul>
+      <div class="hosts">
+        <span class="host"><a href="https://sermon-studio.app">sermon-studio.app</a><span class="tag">Norsk</span><span class="tag">English</span></span>
+        <span class="host"><a href="https://demo.sermon-studio.app">demo.sermon-studio.app</a><span class="tag">Try it</span></span>
+        <a class="source" href="https://github.com/gunnaringe/sermon-studio" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
+      </div>
+    </li>
+
+    <li class="app" style="--accent: var(--chores)">
+      <img class="shot" src="shots/chores-large.webp" alt="" width="960" height="600" decoding="async">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 4.5h6a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-.5a1 1 0 0 1 1-1z"/>
+          <path d="M16 5.8h1.8A2 2 0 0 1 19.8 7.8v10.4a2 2 0 0 1-2 2H6.2a2 2 0 0 1-2-2V7.8a2 2 0 0 1 2-2H8"/>
+          <path d="m8.6 13.2 1.9 1.9 4-4"/>
+        </svg>
+      </span>
+      <a class="card-link" href="https://chores.apphub.casa"><span class="name">Chores</span></a>
+      <span class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
+        </svg>
+      </span>
+      <p class="desc">Family chores and allowance, in one place</p>
+      <ul class="points">
+        <li>Chores with pay, split into must do and can do</li>
+        <li>A wall screen for the kitchen, and a running balance</li>
+        <li>Works with Home Assistant and a Kindle on the wall</li>
+      </ul>
+      <div class="hosts">
+        <span class="host"><a href="https://chores.apphub.casa">chores.apphub.casa</a><span class="tag">English</span></span>
+        <span class="host"><a href="https://ukepenger.apphub.casa">ukepenger.apphub.casa</a><span class="tag">Norsk</span></span>
+        <a class="source" href="https://github.com/gunnaringe/chores" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
+      </div>
+    </li>
+  </ul>
+
+  <h2 id="everyday">Everyday</h2>
+  <ul class="apps" aria-labelledby="everyday">
     <li class="app" style="--accent: var(--clock)">
       <img class="shot" src="shots/clock.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
@@ -267,6 +432,32 @@
       <p class="desc">World clock with a 24-hour planner, made for wall screens</p>
       <div class="hosts">
         <span class="host"><a href="https://clock.apphub.casa">clock.apphub.casa</a></span>
+        <a class="source" href="https://github.com/gunnaringe/world-clock" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
+      </div>
+    </li>
+
+    <li class="app" style="--accent: var(--whenever)">
+      <img class="shot" src="shots/whenever.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3.5" y="5" width="17" height="15.5" rx="2"/>
+          <path d="M3.5 9.5h17"/>
+          <path d="M8 3v4"/>
+          <path d="M16 3v4"/>
+          <path d="m9 14.6 2 2 4-4"/>
+        </svg>
+      </span>
+      <a class="card-link" href="https://whenever.apphub.casa"><span class="name">Whenever</span></a>
+      <span class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
+        </svg>
+      </span>
+      <p class="desc">Find the day or time that suits most people, with one link to share</p>
+      <div class="hosts">
+        <span class="host"><a href="https://whenever.apphub.casa">whenever.apphub.casa</a><span class="tag">English</span></span>
+        <span class="host"><a href="https://finn-tid.apphub.casa">finn-tid.apphub.casa</a><span class="tag">Norsk</span></span>
+        <a class="source" href="https://github.com/gunnaringe/whenever" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
       </div>
     </li>
 
@@ -288,52 +479,13 @@
       <p class="desc">Minimal world clock</p>
       <div class="hosts">
         <span class="host"><a href="https://time.apphub.casa">time.apphub.casa</a><span class="tag">Norsk</span><span class="tag">English</span></span>
+        <a class="source" href="https://github.com/gunnaringe/time" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
       </div>
     </li>
+  </ul>
 
-    <li class="app" style="--accent: var(--chores)">
-      <img class="shot" src="shots/chores.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
-      <span class="icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M9 4.5h6a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-.5a1 1 0 0 1 1-1z"/>
-          <path d="M16 5.8h1.8A2 2 0 0 1 19.8 7.8v10.4a2 2 0 0 1-2 2H6.2a2 2 0 0 1-2-2V7.8a2 2 0 0 1 2-2H8"/>
-          <path d="m8.6 13.2 1.9 1.9 4-4"/>
-        </svg>
-      </span>
-      <a class="card-link" href="https://chores.apphub.casa"><span class="name">Chores</span></a>
-      <span class="arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
-        </svg>
-      </span>
-      <p class="desc">Family allowance &amp; chore tracker</p>
-      <div class="hosts">
-        <span class="host"><a href="https://chores.apphub.casa">chores.apphub.casa</a><span class="tag">English</span></span>
-        <span class="host"><a href="https://ukepenger.apphub.casa">ukepenger.apphub.casa</a><span class="tag">Norsk</span></span>
-      </div>
-    </li>
-
-    <li class="app" style="--accent: var(--runes)">
-      <img class="shot" src="shots/runenavn.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
-      <span class="icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8.5 3.5v17"/>
-          <path d="m8.5 8.2 7-4.1"/>
-          <path d="m8.5 14 7-4.1"/>
-        </svg>
-      </span>
-      <a class="card-link" href="https://runenavn.apphub.casa"><span class="name">Runenavn</span></a>
-      <span class="arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
-        </svg>
-      </span>
-      <p class="desc">Your name written in runes</p>
-      <div class="hosts">
-        <span class="host"><a href="https://runenavn.apphub.casa">runenavn.apphub.casa</a><span class="tag">Norsk</span></span>
-      </div>
-    </li>
-
+  <h2 id="fun">Fun &amp; games</h2>
+  <ul class="apps" aria-labelledby="fun">
     <li class="app" style="--accent: var(--colors)">
       <picture>
         <source srcset="shots/color.webp" media="(prefers-reduced-motion: reduce)">
@@ -355,6 +507,7 @@
       <p class="desc">Random color screen for kids' games</p>
       <div class="hosts">
         <span class="host"><a href="https://color.apphub.casa">color.apphub.casa</a><span class="tag">Norsk</span><span class="tag">English</span></span>
+        <a class="source" href="https://github.com/gunnaringe/color" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
       </div>
     </li>
 
@@ -380,32 +533,68 @@
       <p class="desc">Full-screen countdown timer for kids</p>
       <div class="hosts">
         <span class="host"><a href="https://countdown.apphub.casa">countdown.apphub.casa</a><span class="tag">Norsk</span><span class="tag">English</span></span>
+        <a class="source" href="https://github.com/gunnaringe/countdown" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
       </div>
     </li>
 
-    <li class="app" style="--accent: var(--sermon)">
-      <img class="shot" src="shots/sermon-studio.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+    <li class="app" style="--accent: var(--scores)">
+      <img class="shot" src="shots/poengblokka.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
       <span class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 11v2"/>
-          <path d="M8 8.5v7"/>
-          <path d="M12 4.5v15"/>
-          <path d="M16 8.5v7"/>
-          <path d="M20 11v2"/>
+          <rect x="5" y="3.5" width="14" height="17" rx="2"/>
+          <path d="M5 8.5h14"/>
+          <path d="M12 3.5v17"/>
+          <path d="M7.5 12.5h2"/>
+          <path d="M14.5 12.5h2"/>
+          <path d="M7.5 16h2"/>
+          <path d="M14.5 16h2"/>
         </svg>
       </span>
-      <a class="card-link" href="https://sermon-studio.app"><span class="name">Sermon Studio</span></a>
+      <a class="card-link" href="https://poengblokka.apphub.casa"><span class="name">Poengblokka</span></a>
       <span class="arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
         </svg>
       </span>
-      <p class="desc">Cut, tag and normalise sermon recordings for churches</p>
+      <p class="desc">Score keeping for card games, shared at the table with a QR code</p>
       <div class="hosts">
-        <span class="host"><a href="https://sermon-studio.app">sermon-studio.app</a><span class="tag">Norsk</span><span class="tag">English</span></span>
+        <span class="host"><a href="https://poengblokka.apphub.casa">poengblokka.apphub.casa</a><span class="tag">Norsk</span><span class="tag">English</span></span>
+        <span class="host"><a href="https://scorepad.apphub.casa">scorepad.apphub.casa</a></span>
+        <a class="source" href="https://github.com/gunnaringe/scorepad" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
+      </div>
+    </li>
+
+    <li class="app" style="--accent: var(--runes)">
+      <img class="shot" src="shots/runenavn.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8.5 3.5v17"/>
+          <path d="m8.5 8.2 7-4.1"/>
+          <path d="m8.5 14 7-4.1"/>
+        </svg>
+      </span>
+      <a class="card-link" href="https://runenavn.apphub.casa"><span class="name">Runenavn</span></a>
+      <span class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 16 16 8"/><path d="M9.5 8H16v6.5"/>
+        </svg>
+      </span>
+      <p class="desc">Your name written in runes</p>
+      <div class="hosts">
+        <span class="host"><a href="https://runenavn.apphub.casa">runenavn.apphub.casa</a><span class="tag">Norsk</span></span>
+        <a class="source" href="https://github.com/gunnaringe/rune-name" aria-label="source on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>source</a>
       </div>
     </li>
   </ul>
+
+  <section class="about" aria-labelledby="about">
+    <h2 id="about">About</h2>
+    <div class="note">
+      <p class="lead">These are free apps I made because I found them useful myself. If they're useful to you too, please use them. Use the versions hosted here, or fork any of them and run your own copy. No ads, no tracking.</p>
+      <p>They're hobby projects, so no guarantees.</p>
+      <p>Questions, bugs or ideas? Write to <a href="mailto:mail@apphub.casa">mail@apphub.casa</a>, or open an issue on the app's GitHub.</p>
+    </div>
+  </section>
 
   <footer>
     <a href="https://github.com/gunnaringe/apphub-casa">github.com/gunnaringe/apphub-casa</a>
