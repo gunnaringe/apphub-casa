@@ -300,8 +300,8 @@
     .featured .hosts    { grid-column: 2 / -1; grid-row: 4; }
   }
 
-  .contact p {
-    margin: 0;
+  /* About: what these apps are, and how to get in touch, in one box. */
+  .about .note {
     padding: 1.1rem 1.2rem;
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -309,13 +309,16 @@
     color: var(--muted);
     font-size: 0.95rem;
   }
-  .contact a {
+  .about p { margin: 0; }
+  .about p + p { margin-top: 0.6rem; }
+  .about .lead { color: var(--fg); }
+  .about a {
     color: var(--fg);
     font-weight: 600;
     text-decoration-color: color-mix(in srgb, var(--clock) 50%, transparent);
     text-underline-offset: 3px;
   }
-  .contact a:hover { color: var(--clock); }
+  .about a:hover { color: var(--clock); }
 
   a:focus-visible {
     outline: 2px solid var(--accent, var(--clock));
@@ -584,9 +587,13 @@
     </li>
   </ul>
 
-  <section class="contact" aria-labelledby="contact">
-    <h2 id="contact">Contact</h2>
-    <p>Questions, bugs or ideas? Write to <a href="mailto:mail@apphub.casa">mail@apphub.casa</a>, or open an issue on the app's GitHub.</p>
+  <section class="about" aria-labelledby="about">
+    <h2 id="about">About</h2>
+    <div class="note">
+      <p class="lead">These are free apps I made because I found them useful myself. If they're useful to you too, please use them. Use the versions hosted here, or fork any of them and run your own copy. No ads, no tracking.</p>
+      <p>They're hobby projects, so no guarantees.</p>
+      <p>Questions, bugs or ideas? Write to <a href="mailto:mail@apphub.casa">mail@apphub.casa</a>, or open an issue on the app's GitHub.</p>
+    </div>
   </section>
 
   <footer>

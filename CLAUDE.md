@@ -10,14 +10,16 @@ preview version only. Never rename the Worker in `wrangler.jsonc` — the apex
 custom domain is bound to it.
 
 Assets are served from the repo root, so anything that shouldn't be public
-goes in `.assetsignore` (currently `tools/` and this file).
+goes in `.assetsignore` (currently `tools/`, `LICENSE` and this file).
 
 ## Layout
 
 Featured apps first (Sermon Studio, Chores: full-width cards in
 `ul.apps.featured`, screenshot left on wide screens, a few `.points`), then
 grouped lists under `h2` headings (Everyday with Clock first, Fun & games),
-then Contact (mail@apphub.casa) and the footer. Clock is much used: keep it
+then About (free, fork or use the hosted ones, no ads or tracking, hobby
+projects, contact mail@apphub.casa) and the footer. The About text promises
+every app can be forked: a new app needs a licence in its repo. Clock is much used: keep it
 first after the featured apps.
 
 ## Adding an app
